@@ -1,15 +1,29 @@
 <template>
 	<div class="container">
 		<h2>To-Do List</h2>
-		<form class="d-flex" @submit.prevent="onSubmit">
-			<div class="flex-grow-1 mr-2">
-				<input class="form-control" type="type" v-model="todo" placeholder="Type new to-do">
+		<form @submit.prevent="onSubmit">
+			<div class="d-flex">
+				<div class="flex-grow-1 mr-2">
+					<input class="form-control" type="type" v-model="todo" placeholder="Type new to-do">
+				</div>
+				<div>
+					<button class="btn btn-primary" type="submit">Add</button>
+				</div>
 			</div>
-			<div>
-				<button class="btn btn-primary" type="submit">Add</button>
-			</div>
+			<div v-show="hasError" style="color:red;">This field cannot be empty</div>
 		</form>
-		{{todos}}
+		<div class="card mt-2"
+			v-for="todo in todos" :key="todo.id">
+			<div class="card-body p-2">
+				<div class="form-check">
+					<input class="form-check-input" type="checkbox" v-model="todo.completed">
+					<label class="form-check-label"
+						:style="todo.completed ? todoStyle: {}">
+						{{ todo.subject }}
+					</label>
+				</div>
+			</div>
+		</div>
 	</div>
 </template>
 
@@ -19,13 +33,24 @@ export default {
   setup() {
 		const todo = ref('');
 		const todos = ref([]);
+		const hasError = ref(false);
+		const todoStyle = {
+			textDecoration: 'line-through',
+			color: 'grey'
+		}
 
 		const onSubmit = () => {
-			console.log(todo.value);
-			todos.value.push({
-				id: Date.now(),
-				subject: todo.value
-			})
+			if(todo.value === '') {
+				hasError.value = true;
+			} else {
+				hasError.value = false;
+				todos.value.push({
+					id: Date.now(),
+					subject: todo.value,
+					completed: false,
+				})
+				todo.value = '';
+			}
 		}
 
 		const updateName = (e) => {
@@ -33,7 +58,7 @@ export default {
 		}
 
 		return {
-			todo, todos, onSubmit, updateName
+			todo, todos, onSubmit, updateName, hasError, todoStyle
 		};
 	}
 }
@@ -48,7 +73,8 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
-.name {
-	color: blue;
+.todo {
+	color: grey;
+	text-decoration: line-through;
 }
 </style>
