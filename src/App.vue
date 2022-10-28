@@ -1,29 +1,39 @@
 <template>
-  <div class="name">{{name}}</div>
-  <div>{{greeting('JeongEEE')}}</div>
-  <div>{{greet}}</div>
-  <div>{{name}}</div>
-	<button class="btn btn-primary" @click="updateName">Click</button>
+	<div class="container">
+		<h2>To-Do List</h2>
+		<form class="d-flex" @submit.prevent="onSubmit">
+			<div class="flex-grow-1 mr-2">
+				<input class="form-control" type="type" v-model="todo" placeholder="Type new to-do">
+			</div>
+			<div>
+				<button class="btn btn-primary" type="submit">Add</button>
+			</div>
+		</form>
+		{{todos}}
+	</div>
 </template>
 
 <script>
 import { ref } from 'vue';
 export default {
   setup() {
-		const name = ref('JeongEEE');
+		const todo = ref('');
+		const todos = ref([]);
 
-		const greeting = (name) => {
-			return 'Hello, ' + name
-		};
+		const onSubmit = () => {
+			console.log(todo.value);
+			todos.value.push({
+				id: Date.now(),
+				subject: todo.value
+			})
+		}
 
-		const greet = greeting(name.value);
-
-		const updateName = () => {
-			name.value = 'GyuJeong'
+		const updateName = (e) => {
+			console.log(e.target.value);
 		}
 
 		return {
-			name, greeting, greet, updateName
+			todo, todos, onSubmit, updateName
 		};
 	}
 }
