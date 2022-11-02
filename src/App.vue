@@ -1,16 +1,21 @@
 <template>
 	<div class="container">
+		<h4>count : {{ count }}</h4>
+		<h4>double count computed : {{ doubleCountComputed }}</h4>
+		<h4>double count method: {{ doubleCountMethod() }}</h4>
+		<button @click="count++">Add One</button>
 		<h2>To-Do List</h2>
 		<TodoSimpleForm @add-todo="addTodo" />
 		<div v-if="!todos.length">
 			추가된 Todo가 없습니다
 		</div>
-		<TodoList :todos="todos" />
+		<TodoList :todos="todos" @toggle-todo="toggleTodo"
+			@delete-todo="deleteTodo" />
 	</div>
 </template>
 
 <script>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import TodoSimpleForm from './components/TodoSimpleForm.vue';
 import TodoList from './components/TodoList.vue';
 export default {
@@ -36,8 +41,22 @@ export default {
 			todos.value.splice(index, 1);
 		}
 
+		function toggleTodo(index) {
+			todos.value[index].completed = !todos.value[index].completed;
+		}
+
+		const count = ref(1);
+		const doubleCountComputed = computed(() => {
+			return count.value * 2;
+		});
+
+		const doubleCountMethod = () => {
+			return count.value * 2;
+		}
+
 		return {
-			todos, addTodo, updateName, todoStyle, deleteTodo
+			todos, addTodo, updateName, todoStyle, deleteTodo, toggleTodo,
+			count, doubleCountComputed, doubleCountMethod
 		};
 	}
 }
