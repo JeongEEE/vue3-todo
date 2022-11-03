@@ -5,6 +5,8 @@
 			placeholder="Search">
 		<hr />
 		<TodoSimpleForm @add-todo="addTodo" />
+		<div>{{error}}</div>
+
 		<div v-if="!filteredTodos.length">
 			There is nothing to display
 		</div>
@@ -17,6 +19,7 @@
 import { ref, computed } from 'vue';
 import TodoSimpleForm from './components/TodoSimpleForm.vue';
 import TodoList from './components/TodoList.vue';
+import axios from 'axios';
 export default {
 	components: {
 		TodoSimpleForm, TodoList
@@ -27,9 +30,20 @@ export default {
 			textDecoration: 'line-through',
 			color: 'grey'
 		}
+		const error = ref('')
 
-		const addTodo = (todo) => {
-			todos.value.push(todo);
+		const addTodo = async (todo) => {
+			error.value = '';
+			try {
+				const res = await axios.post('http://localhost:3000/todos', {
+					subject: todo.subject,
+					completed: todo.completed,
+				});
+				todos.value.push(res.data);
+			} catch(err) {
+				console.log(err);
+				error.value = 'Something went wrong.'
+			}
 		}
 
 		const updateName = (e) => {
@@ -56,7 +70,7 @@ export default {
 
 		return {
 			todos, addTodo, updateName, todoStyle, deleteTodo, toggleTodo,
-			searchText, filteredTodos
+			searchText, filteredTodos, error
 		};
 	}
 }
