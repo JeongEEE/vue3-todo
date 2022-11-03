@@ -5,7 +5,7 @@
 			placeholder="Search">
 		<hr />
 		<TodoSimpleForm @add-todo="addTodo" />
-		<div>{{error}}</div>
+		<div style="color:red;">{{error}}</div>
 
 		<div v-if="!filteredTodos.length">
 			There is nothing to display
@@ -16,6 +16,10 @@
 </template>
 
 <script>
+/*
+	json-server 실행 명령어
+	npx json-server --watch db.json --port 3000
+*/
 import { ref, computed } from 'vue';
 import TodoSimpleForm from './components/TodoSimpleForm.vue';
 import TodoList from './components/TodoList.vue';
@@ -32,6 +36,18 @@ export default {
 		}
 		const error = ref('')
 
+		const getTodos = async () => {
+			try {
+				const res = await axios.get('http://localhost:3000/todos');
+				console.log(res.data);
+				todos.value = res.data;
+			} catch(err) {
+				console.log(err);
+				error.value = 'Something went wrong.'
+			}
+		}
+		getTodos();
+
 		const addTodo = async (todo) => {
 			error.value = '';
 			try {
@@ -46,16 +62,35 @@ export default {
 			}
 		}
 
+		const deleteTodo = async (index) => {
+			error.value = '';
+			const id = todos.value[index].id;
+			try {
+				const res = await axios.delete('http://localhost:3000/todos/' + id);
+				console.log(res);
+				todos.value.splice(index, 1);
+			} catch(err) {
+				console.log(err);
+				error.value = 'Something went wrong.'
+			}
+		}
+
 		const updateName = (e) => {
 			console.log(e.target.value);
 		}
 
-		function deleteTodo(index) {
-			todos.value.splice(index, 1);
-		}
-
-		function toggleTodo(index) {
-			todos.value[index].completed = !todos.value[index].completed;
+		async function toggleTodo(index) {
+			error.value = '';
+			const id = todos.value[index].id;
+			try {
+				await axios.patch('http://localhost:3000/todos/' + id, {
+					completed: !todos.value[index].completed
+				});
+				todos.value[index].completed = !todos.value[index].completed;
+			} catch (err) {
+				console.log(err);
+				error.value = 'Something went wrong.'
+			}
 		}
 		
 		const searchText = ref('');
