@@ -27,6 +27,11 @@ export default {
 	},
 	emits: ['toggle-todo', 'delete-todo'],
 	setup(props, { emit }) {
+		const todoStyle = {
+			textDecoration: 'line-through',
+			color: 'grey'
+		}
+
 		const toggleTodo = (index) => {
 			emit('toggle-todo', index);
 		}
@@ -37,7 +42,7 @@ export default {
 
 
 		return {
-			toggleTodo, deleteTodo
+			todoStyle, toggleTodo, deleteTodo
 		}
 	}
 }
