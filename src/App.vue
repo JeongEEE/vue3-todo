@@ -2,7 +2,7 @@
 	<div class="container">
 		<h2>To-Do List</h2>
 		<input class="form-control" type="type" v-model="searchText" 
-			placeholder="Search">
+			placeholder="Search" @keyup.enter="searchTodo">
 		<hr />
 		<TodoSimpleForm @add-todo="addTodo" />
 		<div style="color:red;">{{error}}</div>
@@ -127,8 +127,16 @@ export default {
 			}
 		}
 		
-		watch(searchText, () => {
+		let timeout = null;
+		const searchTodo = () => {
+			clearTimeout(timeout);
 			getTodos(1);
+		};
+		watch(searchText, () => {
+			clearTimeout(timeout);
+			timeout = setTimeout(() => {
+				getTodos(1);
+			}, 2000);
 		});
 
 		// const filteredTodos = computed(() => {
@@ -142,7 +150,7 @@ export default {
 
 		return {
 			todos, addTodo, updateName, deleteTodo, toggleTodo, getTodos,
-			searchText, error, numberOfPages, currentPage
+			searchText, error, numberOfPages, currentPage, searchTodo
 		};
 	}
 }
