@@ -1,6 +1,6 @@
 <template>
-	<h1>To-do Page</h1>
-	<TodoForm :editing="true" />
+	<h1>Create Todo</h1>
+	<TodoForm />
 </template>
 
 <script>
@@ -9,11 +9,10 @@ export default {
 	components: {
 		TodoForm
 	},
-	setup() {
+	setup () {
+		
 
-		return {
-			
-		}
+		return {}
 	}
 }
 </script>
