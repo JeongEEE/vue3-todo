@@ -3,11 +3,13 @@
 	<form v-else @submit.prevent="onSave">
 		<div class="row">
 			<div class="col-6">
-				<div class="form-group">
+				<!-- <div class="form-group">
 					<label>Todo Subject</label>
 					<input v-model="todo.subject" type="text" class="form-control">
 					<div v-if="subjectError" style="color:red;">{{subjectError}}</div>
-				</div>
+				</div> -->
+				<Input label="Subject" v-model:subject="todo.subject"
+					:error="subjectError" />
 			</div>
 			<div v-if="editing" class="col-6">
 				<div class="form-group">
@@ -48,9 +50,10 @@ import { ref, computed, onBeforeMount, onMounted, onBeforeUpdate,
 import _ from 'lodash';
 import Toast from '@/components/Toast.vue';
 import { useToast } from '@/composables/toast'
+import Input from '@/components/Input.vue'
 export default {
 	components: {
-		Toast
+		Input, Toast
 	},
 	props: {
 		editing: {
@@ -148,7 +151,7 @@ export default {
 
 		return {
 			todo, loading, toggleTodoStatus, moveToTodoListPage, onSave,
-			todoUpdated, showToast, toastMessage, toastAlertType, subjectError
+			todoUpdated, showToast, toastMessage, toastAlertType, subjectError,
 		}
 	}
 }
