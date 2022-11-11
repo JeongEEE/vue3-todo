@@ -44,7 +44,7 @@
 
 <script>
 import { useRoute, useRouter } from 'vue-router';
-import axios from 'axios';
+import axios from '@/axios';
 import { ref, computed, onBeforeMount, onMounted, onBeforeUpdate,
 	onUpdated, onBeforeUnmount, onUnmounted } from 'vue'
 import _ from 'lodash';
@@ -95,7 +95,7 @@ export default {
 		async function getTodo() {
 			loading.value = true;
 			try {
-				const res = await axios.get(`http://localhost:3000/todos/${todoId}`);
+				const res = await axios.get(`todos/${todoId}`);
 				todo.value = { ...res.data }; // 같은 메모리를 참조하므로 새로운 객체로 만들기
 				originalTodo.value = { ...res.data };
 				loading.value = false;
@@ -135,10 +135,10 @@ export default {
 					body: todo.value.body
 				}
 				if(props.editing) {
-					res = await axios.put(`http://localhost:3000/todos/${todoId}`, data);
+					res = await axios.put(`todos/${todoId}`, data);
 					originalTodo.value = { ...res.data };
 				} else {
-					res = await axios.post(`http://localhost:3000/todos`, data);
+					res = await axios.post(`todos`, data);
 					todo.value.subject = '';
 					todo.value.body = '';
 				}
