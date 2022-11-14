@@ -144,6 +144,9 @@ export default {
 				}
 				
 				triggerToast('Successfully saved!');
+				if(!props.editing) {
+					router.push({name: 'Todos'})
+				}
 			} catch(err) {
 				triggerToast('Something went wrong', 'danger')
 			}
