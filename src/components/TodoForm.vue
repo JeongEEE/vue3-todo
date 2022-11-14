@@ -36,10 +36,6 @@
 		<button class="btn btn-outline-dark ml-2"
 			@click="moveToTodoListPage">Cancel</button>
 	</form>
-
-	<transition name="fade">
-		<Toast v-if="showToast" :message="toastMessage" :type="toastAlertType" />
-	</transition>
 </template>
 
 <script>
@@ -48,12 +44,11 @@ import axios from '@/axios';
 import { ref, computed, onBeforeMount, onMounted, onBeforeUpdate,
 	onUpdated, onBeforeUnmount, onUnmounted } from 'vue'
 import _ from 'lodash';
-import Toast from '@/components/Toast.vue';
 import { useToast } from '@/composables/toast'
 import Input from '@/components/Input.vue'
 export default {
 	components: {
-		Input, Toast
+		Input
 	},
 	props: {
 		editing: {
@@ -161,18 +156,5 @@ export default {
 </script>
 
 <style scoped>
-.fade-enter-active,
-.fade-leave-active {
-	transition: all 1s ease;
-}
-.fade-enter-form,
-.fade-leave-to {
-	opacity: 0;
-	transform: translateY(-50px);
-}
-.fade-enter-to,
-.fade-leave-from {
-	opacity: 1;
-	transform: translateY(0px);
-}
+
 </style>

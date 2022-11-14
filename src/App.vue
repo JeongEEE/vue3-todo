@@ -12,7 +12,7 @@
 	<div class="container">
 		<router-view />
 	</div>
-	<Toast v-if="showToast" :message="toastMessage" :type="toastAlertType" />
+	<Toast />
 </template>
 
 <script>
@@ -23,7 +23,6 @@
 import { onBeforeMount, onMounted, onBeforeUpdate,
 	onUpdated, onBeforeUnmount, onUnmounted } from 'vue'
 import Toast from '@/components/Toast.vue'
-import { useToast } from '@/composables/toast'
 export default {
 	components: {
 		Toast
@@ -48,10 +47,8 @@ export default {
 			// 컴포넌트가 소멸된 후
 		});
 
-		const { showToast, toastMessage, toastAlertType, triggerToast } = useToast();
-
 		return {
-			showToast, toastMessage, toastAlertType, triggerToast
+			
 		};
 	}
 }

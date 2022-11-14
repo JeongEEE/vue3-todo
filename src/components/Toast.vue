@@ -1,24 +1,24 @@
 <template>
-	<div class="alert toast_box" 
-		:class="`alert-${type}`" role="alert">
-		{{ message }}
-	</div>
+	<div class="toast_box">
+		<transition-group name="slide">
+			<div class="alert" 
+				v-for="toast in toasts" :key="toast.id"
+				:class="`alert-${toast.type}`" role="alert">
+				{{ toast.message }}
+			</div>
+		</transition-group>
+	</div>	
 </template>
 
 <script>
+import { useToast } from '@/composables/toast';
 export default {
-	props: {
-		message: {
-			type: String, required: true
-		},
-		type: {
-			type: String, default: 'success'
-		}
-	},
 	setup () {
-		
+		const { toasts } = useToast();
 
-		return {}
+		return {
+			toasts
+		}
 	}
 }
 </script>
@@ -28,5 +28,19 @@ export default {
 	position: fixed;
 	top: 10px;
 	right: 10px;
+}
+.slide-enter-active,
+.slide-leave-active {
+	transition: all 1s ease;
+}
+.slide-enter-form,
+.slide-leave-to {
+	opacity: 0;
+	transform: translateY(-50px);
+}
+.slide-enter-to,
+.slide-leave-from {
+	opacity: 1;
+	transform: translateY(0px);
 }
 </style>

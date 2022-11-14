@@ -2,24 +2,19 @@
 	composition API 사용법
 */
 
-import { ref } from 'vue';
+import { computed } from 'vue';
+import { useStore } from 'vuex';
 export const useToast = () => {
-	const showToast = ref(false);
-	const toastMessage = ref('');
-	const toastAlertType = ref('');
-	const toastTimeout = ref(null);
+	const store = useStore();
+	const toasts = computed(() => store.state.toast.toasts);
+	// const showToast = computed(() => store.state.toast.showToast);
+	// const toastMessage = computed(() => store.getters['toast/toastMessageWithSmile']);
+	// const toastAlertType = computed(() => store.state.toast.toastAlertType);
 
 	const triggerToast = (message, type = 'success') => {
-		showToast.value = true;
-		toastAlertType.value = type;
-		toastMessage.value = message;
-		toastTimeout.value = setTimeout(() => {
-			showToast.value = false;
-			toastMessage.value = '';
-			toastAlertType.value = '';
-		}, 2000);
+		store.dispatch('toast/triggerToast', message, type);
 	}
 	return {
-		showToast, toastMessage, toastAlertType, triggerToast
+		toasts, triggerToast
 	}
 }
